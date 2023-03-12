@@ -1,8 +1,6 @@
 import re
 import csv
 
-
-
 with open("phonebook_raw.csv", 'r', encoding='utf-8') as f:
     rows = csv.reader(f, delimiter=",")
     contacts_list = list(rows)
@@ -22,7 +20,6 @@ def format_name():
         if len(data) > 1:
             column[1] = data[0]
             column[2] = data[1]
-    return
 
 
 def format_num():
@@ -31,14 +28,13 @@ def format_num():
     number_pattern_new = r'+7(\2)\3-\4-\5\7\8\9'
     for column in contacts_list:
         column[5] = number_pattern_raw.sub(number_pattern_new, column[5])
-    return
 
 
 def duplicates():
     for column in contacts_list[1:]:
         first_name = column[0]
         last_name = column[1]
-        for contact in contacts_list:
+        for contact in contacts_list[1:]:
             new_first_name = contact[0]
             new_last_name = contact[1]
             if first_name == new_first_name and last_name == new_last_name:
@@ -52,14 +48,14 @@ def duplicates():
                     column[5] = contact[5]
                 if column[6] == '':
                     column[6] = contact[6]
+
     for contact in contacts_list:
-        if contact not in format_list:
-            format_list.append(contact)
+        if contact[:7] not in format_list:
+            format_list.append(contact[:7])
     return format_list
 
 
 if __name__ == '__main__':
-
     format_name()
     format_num()
     duplicates()
